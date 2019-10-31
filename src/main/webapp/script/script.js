@@ -9,20 +9,20 @@ document.addEventListener('DOMContentLoaded', function () {
         usernameFromToken = tokenJson.sub;
     }
 
-    function updateStatus() {
+
+    function updateStatus(room_id) {
         var mainLoopId = setInterval(function(){
             // Do your update stuff...
             var http = new XMLHttpRequest();
-            var url = "/rest/status/";
+            var url = "/rest/room/" + room_id;
 
             http.open('GET', url, true);
-            http.setRequestHeader('Accept', 'application/json');
-            http.setRequestHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-            http.setRequestHeader('Pragma', 'no-cache');
-            http.setRequestHeader('Expires', '0');
+            http.setRequestHeader('Accept', 'text/plain');
             http.onreadystatechange = function () {
                 if (http.readyState === 4 && http.status === 200) {
-                    var parsedResponse = JSON.parse(http.response);
+                    //console.log(http.responseText);
+
+                    document.getElementById("profile-picture").src = 'data:image/jpeg;base64,' + http.responseText;
                 } else {
                     console.log("Response: " + http.status);
                 }
@@ -213,7 +213,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     if ($("#login").length > 0) {
-        updateStatus();
         var loginForm = document.querySelector("#login form");
 
         loginForm.addEventListener("submit", function (event) {
@@ -314,8 +313,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    if ($("#security").length > 0) {
-        updateStatus()
+    if ($("#room").length > 0) {
+        updateStatus(1)
     }
 
     if ($("#password-reset-enter").length > 0) {

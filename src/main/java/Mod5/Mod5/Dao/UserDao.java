@@ -3,6 +3,7 @@ package Mod5.Mod5.Dao;
 import org.apache.commons.codec.binary.Hex;
 import Mod5.Mod5.model.User;
 import Mod5.Mod5.settings.DatabaseInitialiser;
+import java.util.Date;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -10,10 +11,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -88,14 +86,14 @@ public enum UserDao {
         return null;
     }
 
-    public byte[] getUserImage(String username) {
+    public byte[] getLogImage(String log_id) {
         try {
-            String query = "SELECT picture FROM user_picture AS u" +
-                    "        WHERE u.username = ?";
+            String query = "SELECT picture FROM log AS l" +
+                    "        WHERE l.id_milisec = ?";
 
 
             PreparedStatement statement = DatabaseInitialiser.getCon().prepareStatement(query);
-            statement.setString(1, username);
+            statement.setLong(1, Long.parseLong(log_id));
 
             ResultSet resultSet = statement.executeQuery();
 
@@ -111,6 +109,57 @@ public enum UserDao {
 
         return null;
     }
+
+    public long getCurrentImageID(int room_id) {
+        try {
+            String query = "SELECT picture_log_id FROM room AS r" +
+                    "        WHERE r.room_id = ?";
+
+
+            PreparedStatement statement = DatabaseInitialiser.getCon().prepareStatement(query);
+            statement.setInt(1, room_id);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            // should be only one row
+            if (resultSet.next()) {
+                return resultSet.getLong("picture_log_id");
+            } else {
+                return 0;
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        }
+
+        return 0;
+    }
+
+    public byte[] getLastestImage(int room_id) {
+        long cur = getCurrentImageID(room_id);
+        try {
+            String query = "SELECT picture FROM log AS l" +
+                    "        WHERE l.id_milisec = ?";
+
+
+            PreparedStatement statement = DatabaseInitialiser.getCon().prepareStatement(query);
+            statement.setLong(1, cur);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            // should be only one row
+            if (resultSet.next()) {
+                return resultSet.getBytes("picture");
+            } else {
+                return null;
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        }
+
+        return null;
+    }
+
+
 
     public User getUserDetails(String username) {
         return getUserDetails(username, new User());
@@ -423,6 +472,75 @@ public enum UserDao {
             se.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public boolean addLogFile(InputStream image, String status, int room_id) {
+        Date date = new Date();
+        long cur = date.getTime();
+        try {
+            String query = "INSERT INTO log(picture, picture_status, id_milisec) " +
+                    "VALUES (?,?,?)";
+            System.out.println(image);
+            PreparedStatement statementForUpdate = DatabaseInitialiser.getCon().prepareStatement(query);
+
+            statementForUpdate.setBytes(1, toByteArray(image));
+            statementForUpdate.setString(2, status);
+
+            statementForUpdate.setLong(3,cur);
+
+            int rowsAffected = statementForUpdate.executeUpdate();
+            System.out.println(statementForUpdate);
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        updateLatestImage(cur, room_id);
+        return false;
+    }
+
+    public boolean updateLatestImage(long picture_log_id, int room_id) {
+        try {
+            String query = "UPDATE room " +
+                    "SET picture_log_id = ? "
+                    + " WHERE room_id = ? ";
+
+            PreparedStatement statementForUpdate = DatabaseInitialiser.getCon().prepareStatement(query);
+
+            statementForUpdate.setLong(1, picture_log_id);
+            statementForUpdate.setInt(2, room_id);
+
+            int rowsAffected = statementForUpdate.executeUpdate();
+            System.out.println(statementForUpdate);
+            return rowsAffected > 0;
+
+        } catch (SQLException se) {
+            se.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public boolean updateStatus(String status, int room_id) {
+        try {
+            String query = "UPDATE room " +
+                    " SET status = ? " +
+                    " WHERE room_id = ? ";
+
+            PreparedStatement statementForUpdate = DatabaseInitialiser.getCon().prepareStatement(query);
+
+            statementForUpdate.setString(1, status);
+            statementForUpdate.setInt(2, room_id);
+
+            int rowsAffected = statementForUpdate.executeUpdate();
+
+            return rowsAffected > 0;
+
+        } catch (SQLException se) {
+            se.printStackTrace();
         }
 
         return false;
