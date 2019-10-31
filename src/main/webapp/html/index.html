@@ -1,40 +1,49 @@
-<HTML>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta content="width=device-width,initial-scale=1.0" name="viewport">
+    <meta charset="UTF-8">
+    <title>Runner Dashboard</title>
+    <link crossorigin="anonymous" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+          integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
+    <link href="/style/style.css" rel="stylesheet">
+</head>
+<body id="index">
 
-<HEAD>
+<div class="popup-overlay hidden">
+</div>
 
-    <TITLE>IntelliCam</TITLE>
-    <script>
-        var restServlet = "/";
-        function getStatus() {
-            var txt = "";
-            var	xmlhttp = new XMLHttpRequest();
-            xmlhttp.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                    var status;
-                    // console.log(typeof this.responseText);
-                    if (this.responseText === "true") {
-                        status = "You are being attacked"
-                    } else {
-                        status = "You are not being attacked"
-                    }
-                    document.getElementById("status").innerHTML = status;
-                }
-            };
-            xmlhttp.open("GET", restServlet + "status/", true);
-            xmlhttp.send();
-        }
-        window.onload = getStatus();
-        var interval = setInterval(function () {
-            getStatus();
-        }, 5000)
-    </script>
+<nav>
+	<span class="nav-logo">
+			<a class="font-bold" href="/">runner</a>
+	</span>
 
-</HEAD>
+    <span class="nav-button">
+			<a class="font-bold">
+				<i class="fas fa-bars"></i>
+			</a>
+	</span>
 
-<BODY BGCOLOR="FFFFFF">
+    <div>
+        <ul class="hidden">
 
-<CENTER><h1 id="status"></h1></CENTER>
+        </ul>
+    </div>
+</nav>
 
-</BODY>
 
-</HTML>
+<main>
+    <div id="welcome-main">
+        <p class="font-bold">runlikeapro.</p>
+        <h1>Track your running activities.</h1>
+        <p>All the tools and insights you need to reach your goal and train smarter.</p>
+        <button class="button-raised" type="button"><span><a href="rest/register">Join</a></span></button>
+    </div>
+</main>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/script/prefixfree.min.js"></script>
+<script src="/script/script.js"></script>
+</body>
+</html>

@@ -8,13 +8,24 @@
         <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
         <init-param>
             <param-name>jersey.config.server.provider.packages</param-name>
-            <param-value>Mod5.Mod5.Resouces</param-value>
+            <param-value>Mod5.Mod5.resource</param-value>
         </init-param>
+        <init-param>
+            <param-name>jersey.config.server.provider.classnames</param-name>
+            <param-value>
+                org.glassfish.jersey.media.multipart.MultiPartFeature;
+                Mod5.Mod5.filter.AuthenticationFilter
+            </param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>javax.ws.rs.core.Application</servlet-name>
         <url-pattern>/rest/*</url-pattern>
     </servlet-mapping>
+    <listener>
+        <listener-class>Mod5.Mod5.settings.DatabaseInitialiser</listener-class>
+    </listener>
     <welcome-file-list>
         <welcome-file>html/index.html</welcome-file>
     </welcome-file-list>
