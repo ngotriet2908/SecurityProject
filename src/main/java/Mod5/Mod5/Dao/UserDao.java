@@ -35,6 +35,11 @@ public enum UserDao {
         return os.toByteArray();
     }
 
+//    public static void main(String[] args) {
+//        UserDao dao = UserDao.instance;
+//        dao.register("Chris", "Cristian", "Trusin", "c.trusin@stundent.utwente.nl", "qwerty");
+//    }
+
     public String getUserDetailsWithEmail(String email) {
         try {
             String query = "SELECT * FROM general_user " +
