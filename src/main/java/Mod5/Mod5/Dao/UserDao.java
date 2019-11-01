@@ -86,14 +86,16 @@ public enum UserDao {
         return null;
     }
 
-    public byte[] getLogImage(String log_id) {
+    public byte[] getLogImage(String log_id, int room_id) {
         try {
             String query = "SELECT picture FROM log AS l" +
-                    "        WHERE l.id_milisec = ?";
+                    "        WHERE l.id_milisec = ? " +
+                    "       AND l.room_id = ? ";
 
 
             PreparedStatement statement = DatabaseInitialiser.getCon().prepareStatement(query);
             statement.setLong(1, Long.parseLong(log_id));
+            statement.setInt(2, room_id);
 
             ResultSet resultSet = statement.executeQuery();
 
@@ -138,11 +140,13 @@ public enum UserDao {
         long cur = getCurrentImageID(room_id);
         try {
             String query = "SELECT picture FROM log AS l" +
-                    "        WHERE l.id_milisec = ?";
+                    "        WHERE l.id_milisec = ? " +
+                    "       AND l.room_id = ? ";
 
 
             PreparedStatement statement = DatabaseInitialiser.getCon().prepareStatement(query);
             statement.setLong(1, cur);
+            statement.setInt(2, room_id);
 
             ResultSet resultSet = statement.executeQuery();
 
@@ -481,8 +485,8 @@ public enum UserDao {
         Date date = new Date();
         long cur = date.getTime();
         try {
-            String query = "INSERT INTO log(picture, picture_status, id_milisec) " +
-                    "VALUES (?,?,?)";
+            String query = "INSERT INTO log(picture, picture_status, id_milisec, room_id) " +
+                    "VALUES (?,?,?,?)";
             System.out.println(image);
             PreparedStatement statementForUpdate = DatabaseInitialiser.getCon().prepareStatement(query);
 
@@ -490,6 +494,7 @@ public enum UserDao {
             statementForUpdate.setString(2, status);
 
             statementForUpdate.setLong(3,cur);
+            statementForUpdate.setInt(4,room_id);
 
             int rowsAffected = statementForUpdate.executeUpdate();
             System.out.println(statementForUpdate);

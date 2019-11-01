@@ -38,14 +38,15 @@ public class Log {
             UserDao.instance.addLogFile(picture, status, room_id);
     }
 
-    @Path("/{log_id}")
+    @Path("/{log_id}/{room_id}")
     @GET
     @Produces("image/jpeg")
     public Response getPicture(@PathParam("log_id") String log_id,
+                               @PathParam("log_id") int room_id,
                                @Context HttpServletResponse servletResponse,
                                @Context HttpServletRequest servletRequest) throws IOException {
 
-        byte[] imageData = UserDao.instance.getLogImage(log_id);
+        byte[] imageData = UserDao.instance.getLogImage(log_id, room_id);
         return Response.ok(imageData).build();
     }
 }

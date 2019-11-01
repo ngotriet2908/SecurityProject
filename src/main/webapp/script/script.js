@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
             };
             http.send();
 
-        }, 1000);
+        }, 700);
     }
 
     function getTokenData(token) {
