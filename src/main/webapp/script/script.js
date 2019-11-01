@@ -17,12 +17,15 @@ document.addEventListener('DOMContentLoaded', function () {
             var url = "/rest/room/" + room_id;
 
             http.open('GET', url, true);
-            http.setRequestHeader('Accept', 'text/plain');
+            http.setRequestHeader('Accept', 'application/json');
             http.onreadystatechange = function () {
                 if (http.readyState === 4 && http.status === 200) {
                     //console.log(http.responseText);
+                    var parsedResponse = JSON.parse(http.response);
+                    console.log(parsedResponse);
+                    document.getElementById("profile-picture").src = 'data:image/jpeg;base64,' + parsedResponse.picture;
+                    document.getElementById("span-status").innerHTML = parsedResponse.status;
 
-                    document.getElementById("profile-picture").src = 'data:image/jpeg;base64,' + http.responseText;
                 } else {
                     console.log("Response: " + http.status);
                 }

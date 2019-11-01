@@ -1,6 +1,8 @@
 package Mod5.Mod5.resource;
 
 import Mod5.Mod5.Dao.UserDao;
+import Mod5.Mod5.model.Picture;
+import Mod5.Mod5.model.PlainPicture;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -61,17 +63,18 @@ public class Room {
                                @Context HttpServletRequest servletRequest) throws IOException {
 
         System.out.println("get latest image of room " + String.valueOf(room_id));
-        byte[] imageData = UserDao.instance.getLastestImage(room_id);
+        byte[] imageData = UserDao.instance.getLastestImage(room_id).getPicture();
         return Response.ok(imageData).build();
     }
 
     @Path("/{room_id}")
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response getPictureBase64(@PathParam("room_id") int room_id,
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public PlainPicture getPictureBase64(@PathParam("room_id") int room_id,
                                      @Context HttpServletResponse servletResponse,
                                      @Context HttpServletRequest servletRequest) throws IOException {
-        byte[] imageData = UserDao.instance.getLastestImage(room_id);
+        Picture current = UserDao.instance.getLastestImage(room_id);
+        byte[] imageData = current.getPicture();
 
         if (imageData == null) {
             ClassLoader classLoader = getClass().getClassLoader();
@@ -80,7 +83,7 @@ public class Room {
         }
 
         String encoded = Base64.getEncoder().encodeToString(imageData);
-        return Response.ok(encoded).build();
+        return new PlainPicture(encoded, current.getStatus());
     }
 
 }

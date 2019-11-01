@@ -1,5 +1,6 @@
 package Mod5.Mod5.Dao;
 
+import Mod5.Mod5.model.Picture;
 import org.apache.commons.codec.binary.Hex;
 import Mod5.Mod5.model.User;
 import Mod5.Mod5.settings.DatabaseInitialiser;
@@ -141,10 +142,10 @@ public enum UserDao {
         return 0;
     }
 
-    public byte[] getLastestImage(int room_id) {
+    public Picture getLastestImage(int room_id) {
         long cur = getCurrentImageID(room_id);
         try {
-            String query = "SELECT picture FROM log AS l" +
+            String query = "SELECT picture, picture_status FROM log AS l" +
                     "        WHERE l.id_milisec = ? " +
                     "       AND l.room_id = ? ";
 
@@ -157,7 +158,7 @@ public enum UserDao {
 
             // should be only one row
             if (resultSet.next()) {
-                return resultSet.getBytes("picture");
+                return new Picture(resultSet.getBytes("picture"), resultSet.getString("picture_status"));
             } else {
                 return null;
             }
