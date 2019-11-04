@@ -380,7 +380,7 @@ document.addEventListener('DOMContentLoaded', function () {
             } else if (message === "activate_success") {
                 message = "Account was successfully activated."
             } else if (message === "registration_success") {
-                message = "Your account was successfully registered. Confirm your email address with the link we just sent to you."
+                message = "Your account was successfully registered."
             } else if (message === "reset_request_success") {
                 message = "If a matching account was found, an email was sent to allow you to reset your password.."
             }
