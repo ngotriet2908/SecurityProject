@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
         http.setRequestHeader('Accept', 'application/json');
         http.onreadystatechange = function () {
             if (http.readyState === 4 && http.status === 200) {
+
                 //console.log(http.responseText);
                 var parsedResponse = JSON.parse(http.response);
                 console.log(parsedResponse);
@@ -59,6 +60,14 @@ document.addEventListener('DOMContentLoaded', function () {
                         '                        </div>\n' +
                         '                    </div>')
                 }
+                document.querySelector("#profile-picture-general div:nth-child(1) p span:nth-child(2)").innerText = parsedResponse.totalRoom;
+                document.querySelector("#profile-picture-general div:nth-child(2) p span:nth-child(2)").innerText = parsedResponse.totalRoomWithPeople;
+                document.querySelector("#profile-picture-general div:nth-child(3) p span:nth-child(2)").innerText = parsedResponse.getTotalRoomWithFire;
+                document.querySelector("#total-room-span").innerText = parsedResponse.totalRoom;
+                document.querySelector("#total-room-with-people-span").innerText = parsedResponse.totalRoomWithPeople;
+                document.querySelector("#total-room-with-fire-span").innerText = parsedResponse.getTotalRoomWithFire;
+
+
             } else {
                 console.log("Response: " + http.status);
             }
@@ -66,11 +75,11 @@ document.addEventListener('DOMContentLoaded', function () {
         http.send();
     }
 
-    function updateStatus(room_id) {
+    function updateStatus() {
         var mainLoopId = setInterval(function(){
             // Do your update stuff...
             var http = new XMLHttpRequest();
-            var url = "/rest/room/" + room_id;
+            var url = window.location.href;
 
             http.open('GET', url, true);
             http.setRequestHeader('Accept', 'application/json');
@@ -79,8 +88,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     //console.log(http.responseText);
                     var parsedResponse = JSON.parse(http.response);
                     console.log(parsedResponse);
-                    document.getElementById("profile-picture").src = 'data:image/jpeg;base64,' + parsedResponse.picture;
-                    document.getElementById("span-status").innerHTML = parsedResponse.status;
+
+                    document.getElementById("security-img-img").src = 'data:image/jpeg;base64,' + parsedResponse.picture;
+                    document.getElementById("security-span-status").innerHTML = parsedResponse.roomStatus.people;
+                    document.getElementById("security-span-temp").innerHTML = parsedResponse.roomStatus.temp;
+                    document.getElementById("security-span-fire").innerHTML = (parsedResponse.roomStatus.temp > 25)? "True" : "False";
 
                 } else {
                     console.log("Response: " + http.status);
@@ -381,7 +393,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     if ($("#room").length > 0) {
-        updateStatus(1)
+        updateStatus()
     }
     if ($("#security-html-page").length > 0) {
         console.log("started the loop");

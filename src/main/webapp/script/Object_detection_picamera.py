@@ -94,6 +94,12 @@ def countAndSend(scores, classes, frame):
     else:
         frame_temp_count = frame_temp_count + 1
 
+    if (frame_count >= 2):
+        send_log_image(frame, in_frame)
+        frame_count = 0
+    else:
+        frame_count = frame_count + 1
+
 
 def send_log_image(frame, status):
     

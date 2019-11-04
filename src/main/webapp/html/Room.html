@@ -3,26 +3,60 @@
 <head>
     <meta content="width=device-width,initial-scale=1.0" name="viewport">
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>ROOM</title>
     <link crossorigin="anonymous" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
           integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
     <link href="/style/style.css" rel="stylesheet">
 </head>
 <body id="room">
-
-    <div>
-        <span>Status </span> <span id="span-status"> Not Update </span>
+    <div class="room-top">
     </div>
-    <div id="profile-picture-img">
-    <!--<img id="profile-profile" src="../img/profile_bluer.png" alt="profile picture">-->
-        <img alt="profile picture" id="profile-picture" src="">
 
-    </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <!--<script src="/script/jquery.nicescroll.js"></script>-->
-    <script src="/script/prefixfree.min.js"></script>
-    <script src="/script/script.js"></script>
+    <nav>
+            <span class="nav-logo">
+                <a class="font-bold" href="/">runner</a>
+            </span>
 
+        <span class="nav-button">
+                    <a class="font-bold">
+                        <i class="fas fa-bars"></i>
+                    </a>
+            </span>
+
+        <div>
+            <ul class="hidden">
+
+                <li class="nav-item">
+                    <a href="/">home</a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="/rest/logout">sign out</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main id="room-main">
+        <div class="room-status-class" id="room-status">
+            <span>People in picture: </span> <span id="security-span-status"> Not Update </span>
+        </div>
+        <div class="room-status-class" id="room-temp">
+            <span>Temperature: </span> <span id="security-span-temp"> 12 </span> <span> Celsius</span>
+        </div>
+        <div class="room-status-class" id="room-fire">
+            <span>Fire in room: </span> <span id="security-span-fire"> Yes </span>
+        </div>
+        <div id="security-img">
+        <!--<img id="profile-profile" src="../img/profile_bluer.png" alt="profile picture">-->
+            <img alt="profile picture" id="security-img-img" src="">
+
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <!--<script src="/script/jquery.nicescroll.js"></script>-->
+        <script src="/script/prefixfree.min.js"></script>
+        <script src="/script/script.js"></script>
+    </main>
 </body>
 </html>

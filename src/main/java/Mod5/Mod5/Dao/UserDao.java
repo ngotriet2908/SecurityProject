@@ -1,9 +1,7 @@
 package Mod5.Mod5.Dao;
 
-import Mod5.Mod5.model.Picture;
-import Mod5.Mod5.model.RoomStatus;
+import Mod5.Mod5.model.*;
 import org.apache.commons.codec.binary.Hex;
-import Mod5.Mod5.model.User;
 import Mod5.Mod5.settings.DatabaseInitialiser;
 import java.util.Date;
 
@@ -119,9 +117,9 @@ public enum UserDao {
         return null;
     }
 
-    public long getCurrentImageID(int room_id) {
+    public PictureIDwithStatus getCurrentImageID(int room_id) {
         try {
-            String query = "SELECT picture_log_id FROM room AS r" +
+            String query = "SELECT picture_log_id, temperature, people FROM room AS r" +
                     "        WHERE r.room_id = ?";
 
 
@@ -132,19 +130,21 @@ public enum UserDao {
 
             // should be only one row
             if (resultSet.next()) {
-                return resultSet.getLong("picture_log_id");
+                return new PictureIDwithStatus(resultSet.getLong("picture_log_id"),
+                        new RoomStatus(resultSet.getFloat("temperature"), resultSet.getString("people"), room_id));
             } else {
-                return 0;
+                return null;
             }
         } catch (SQLException se) {
             se.printStackTrace();
         }
 
-        return 0;
+        return null;
     }
 
-    public Picture getLastestImage(int room_id) {
-        long cur = getCurrentImageID(room_id);
+    public PictureByteWithStatus getLastestImage(int room_id) {
+        PictureIDwithStatus pictureIDwithStatus = getCurrentImageID(room_id);
+        long cur = pictureIDwithStatus.getPicture();
         try {
             String query = "SELECT picture, picture_status FROM log AS l" +
                     "        WHERE l.id_milisec = ? " +
@@ -159,7 +159,7 @@ public enum UserDao {
 
             // should be only one row
             if (resultSet.next()) {
-                return new Picture(resultSet.getBytes("picture"), resultSet.getString("picture_status"));
+                return new PictureByteWithStatus(resultSet.getBytes("picture"), pictureIDwithStatus.getRoomStatus());
             } else {
                 return null;
             }

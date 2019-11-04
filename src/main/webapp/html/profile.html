@@ -36,7 +36,7 @@
             </li>
 
             <li class="nav-item">
-                <a href="/runner/logout">sign out</a>
+                <a href="/rest/logout">sign out</a>
             </li>
         </ul>
     </div>
@@ -46,8 +46,8 @@
     <div class="profile-card" id="profile-picture-container">
 
         <div id="profile-picture-img">
-            <!--<img id="profile-profile" src="../img/profile_bluer.png" alt="profile picture">-->
-            <img alt="profile picture" id="profile-picture" src="">
+            <img id="profile-profile" src="/img/profile_bluer.png" alt="profile picture">
+<!--            <img alt="profile picture" id="profile-picture" src="">-->
         </div>
 
         <div id="profile-picture-general">
@@ -65,7 +65,7 @@
             </div>
             <div class="profile-picture-general-item">
                 <p>
-                    <span>Average temperature</span>
+                    <span>Room with fire</span>
                     <span></span>
                 </p>
             </div>
@@ -92,7 +92,7 @@
                         <span>Room</span>
                     </h3>
                     <p>
-                        <span>10 </span>
+                        <span id="total-room-span">10 </span>
                     </p>
                 </div>
                 <div class="overview-data-item" id="overview-time">
@@ -101,7 +101,7 @@
                         <span> Room with people</span>
                     </h3>
                     <p>
-                        <span>2 </span>
+                        <span id="total-room-with-people-span">2 </span>
                     </p>
                 </div>
                 <div class="overview-data-item" id="overview-steps">
@@ -110,7 +110,7 @@
                         <span>Fire room</span>
                     </h3>
                     <p>
-                        <span>1</span>
+                        <span id="total-room-with-fire-span">1</span>
                     </p>
                 </div>
 
@@ -122,14 +122,6 @@
             <header>
                 <h1>Activity</h1>
                 <div>
-                    <div class="input-group input-select">
-                        <select id="select-sort-type">
-                            <option value="distanceu">Priority [A-Z]</option>
-                            <option value="distanced">Priority [Z-A]</option>
-
-                        </select>
-                        <label class="select-label">Sort</label>
-                    </div>
                 </div>
             </header>
 

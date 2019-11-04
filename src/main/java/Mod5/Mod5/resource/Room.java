@@ -2,7 +2,9 @@ package Mod5.Mod5.resource;
 
 import Mod5.Mod5.Dao.UserDao;
 import Mod5.Mod5.model.Picture;
+import Mod5.Mod5.model.PictureByteWithStatus;
 import Mod5.Mod5.model.PlainPicture;
+import Mod5.Mod5.model.PlainPictureWithStatus;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -86,10 +88,10 @@ public class Room {
     @Path("/{room_id}")
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public PlainPicture getPictureBase64(@PathParam("room_id") int room_id,
+    public PlainPictureWithStatus getPictureBase64(@PathParam("room_id") int room_id,
                                      @Context HttpServletResponse servletResponse,
                                      @Context HttpServletRequest servletRequest) throws IOException {
-        Picture current = UserDao.instance.getLastestImage(room_id);
+        PictureByteWithStatus current = UserDao.instance.getLastestImage(room_id);
         byte[] imageData = current.getPicture();
 
         if (imageData == null) {
@@ -99,7 +101,7 @@ public class Room {
         }
 
         String encoded = Base64.getEncoder().encodeToString(imageData);
-        return new PlainPicture(encoded, current.getStatus());
+        return new PlainPictureWithStatus(encoded, current.getRoomStatus());
     }
 
 }

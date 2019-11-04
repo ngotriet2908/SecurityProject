@@ -45,8 +45,19 @@ public class ServerResources {
 //                response.addHeader("message", message);
 //            }
 //        }
+        List<RoomStatus> roomStatusList = UserDao.instance.getRoomsStatus(username);
+        int totalRoomWithPeople = 0;
+        int totalRoomWithFire = 0;
+        for(int i = 0; i < roomStatusList.size(); i++) {
+            if (roomStatusList.get(i).getTemp() > 25) {
+                totalRoomWithFire++;
+            }
+            if (roomStatusList.get(i).getPeople().equals("True")) {
+                totalRoomWithPeople++;
+            }
+        }
         System.out.println("getting rooms status");
-        return new UserRoom(UserDao.instance.getRoomsStatus(username), username);
+        return new UserRoom(roomStatusList, username,roomStatusList.size(),totalRoomWithPeople,totalRoomWithFire);
     }
 
     @GET
