@@ -9,6 +9,62 @@ document.addEventListener('DOMContentLoaded', function () {
         usernameFromToken = tokenJson.sub;
     }
 
+    function update_status_once() {
+        var http = new XMLHttpRequest();
+        var url = window.location.href;
+
+        http.open('GET', url + "/status", true);
+        http.setRequestHeader('Accept', 'application/json');
+        http.onreadystatechange = function () {
+            if (http.readyState === 4 && http.status === 200) {
+                //console.log(http.responseText);
+                var parsedResponse = JSON.parse(http.response);
+                console.log(parsedResponse);
+                var $container = $("#runs-data-container");
+                $container.empty();
+                for (var i = 0; i < parsedResponse.roomStatusList.length; i++) {
+                    var Fire = "No";
+                    if (parsedResponse.roomStatusList[i].temp > 25) {
+                        alert("room " + parsedResponse.roomStatusList[i].room_id + " is on FIRE")
+                        Fire = "Yes"
+                    }
+                    $container.append('<div class="profile-card profile-run-card">\n' +
+                        '                        <div class="run-card-blocks"><div>\n' +
+                        '                            <div class="run-card-title">\n' +
+                        '                                <h4>Room</h4>\n' +
+                        '                            </div>\n' +
+                        '                            <div class="run-card-date">\n' +
+                        '                                ' + parsedResponse.roomStatusList[i].room_id + '\n' +
+                        '                            </div>\n' +
+                        '                        </div>\n' +
+                        '                            <div class="run-card-distance">\n' +
+                        '                                <div>Temperature</div>\n' +
+                        '                                <div>  ' + parsedResponse.roomStatusList[i].temp + '</div>\n' +
+                        '                            </div>\n' +
+                        '                            <div class="run-card-time">\n' +
+                        '                                <div>Fire Alarm</div>\n' +
+                        '                                <div> ' + Fire+ '</div>\n' +
+                        '                            </div>\n' +
+                        '                            <div class="run-card-steps">\n' +
+                        '                                <div>People</div>\n' +
+                        '                                <div>'+ parsedResponse.roomStatusList[i].people +'</div>\n' +
+                        '                            </div>\n' +
+                        '                            <div class="run-card-see-more">\n' +
+                        '                                <a class="button-raised" href="/rest/room/' + parsedResponse.roomStatusList[i].room_id +'">\n' +
+                        '                                    <span>\n' +
+                        '                                        <i class="fas fa-angle-right"></i>\n' +
+                        '                                    </span>\n' +
+                        '                                </a>\n' +
+                        '                            </div>\n' +
+                        '                        </div>\n' +
+                        '                    </div>')
+                }
+            } else {
+                console.log("Response: " + http.status);
+            }
+        };
+        http.send();
+    }
 
     function updateStatus(room_id) {
         var mainLoopId = setInterval(function(){
@@ -33,6 +89,14 @@ document.addEventListener('DOMContentLoaded', function () {
             http.send();
 
         }, 700);
+    }
+
+    function updating_room_status() {
+        var mainLoopIdd = setInterval(function(){
+            // Do your update stuff...
+            update_status_once()
+
+        }, 5000);
     }
 
     function getTokenData(token) {
@@ -319,6 +383,10 @@ document.addEventListener('DOMContentLoaded', function () {
     if ($("#room").length > 0) {
         updateStatus(1)
     }
+    if ($("#security-html-page").length > 0) {
+        console.log("started the loop");
+        updating_room_status()
+    }
 
     if ($("#password-reset-enter").length > 0) {
         var constraints = {
@@ -457,78 +525,10 @@ document.addEventListener('DOMContentLoaded', function () {
         indexNavUl.append("<li class='nav-item'><a href='/rest/login'>sign in</a></li>");
     }
 
-    if ($("#profile").length > 0) {
-
-    }
-
         // loading profile info
     if ($("#profile").length > 0) {
-        getImage(usernameFromToken);
-
-        var http = new XMLHttpRequest();
-        var url = "/rest/profiles/" + usernameFromToken;
-
-        http.open('GET', url, true);
-        http.setRequestHeader('Accept', 'application/json');
-        http.setRequestHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-        http.setRequestHeader('Pragma', 'no-cache');
-        http.setRequestHeader('Expires', '0');
-
-        http.onreadystatechange = function () {
-            if (http.readyState === 4 && http.status === 200) {
-                var parsedResponse = JSON.parse(http.response);
-
-                $("#profile-name-container span")[0].innerText = parsedResponse.firstName + " " + parsedResponse.lastName;
-
-                if (parsedResponse.isPremium === 1) {
-                    // show pro tag
-                    $("#profile-name-container").append('<span id="pro">PRO</span>');
-                } else {
-                    document.querySelector(".nav-item.upgrade").classList.remove("hidden");
-                }
-
-                // convert to km
-                $("#overview-distance p span")[0].innerText = Math.round(parsedResponse.totalDistance / 1000);
-
-                // convert to hours
-                $("#overview-time p span")[0].innerText = Math.round(parsedResponse.totalTime / 3600);
-                $("#overview-steps p span")[0].innerText = Math.round(parsedResponse.totalSteps / 1000) + "k";
-
-
-                document.querySelector("#profile-picture-general div:nth-child(1) p span:nth-child(2)").innerText = parsedResponse.totalRuns;
-                document.querySelector("#profile-picture-general div:nth-child(2) p span:nth-child(2)").innerText = parsedResponse.totalDistance + "m";
-                document.querySelector("#profile-picture-general div:nth-child(3) p span:nth-child(2)").innerText = parsedResponse.totalSteps;
-
-                var $container = $("#runs-data-container");
-
-                if (parsedResponse.runsList.length > 0) {
-                    var lastRunDate = new Date(parsedResponse.runsList[0].date);
-
-                    document.querySelector("#profile-picture-general div:nth-child(4) p:nth-child(2) span").innerText =
-                        parsedResponse.runsList[0].name + " - " + lastRunDate.toDateString();
-
-                    for (var i = 0; i < parsedResponse.runsList.length; i++) {
-                        var runDate = new Date(parsedResponse.runsList[i].date);
-
-                        $container.append('<div class="profile-card profile-run-card">' +
-                            '<div class="run-card-blocks"><div><div class="run-card-title"><h4>' + parsedResponse.runsList[i].name + '</h4></div>' +
-                            '<div class="run-card-date">' + runDate.toDateString() + '</div></div><div class="run-card-distance"><div>Distance</div>' +
-                            '<div>' + roundTo(parsedResponse.runsList[i].distance / 1000, 2) + ' km</div></div><div class="run-card-time">' +
-                            '<div>Time</div><div>' + convertTime(parsedResponse.runsList[i].duration) + '</div></div><div class="run-card-steps">' +
-                            '<div>Steps</div><div>' + parsedResponse.runsList[i].steps + '</div></div><div class="run-card-see-more">' +
-                            '<a class="button-raised" href="/rest/runs/' + parsedResponse.runsList[i].id + '"><span><i class="fas fa-angle-right"></i>' +
-                            '</span></a></div></div></div>');
-                    }
-
-                } else {
-                    $container.append('<div class="profile-card profile-run-card">Nothing here yet...</div>');
-                }
-
-                $(".loader-container-absolute").remove();
-            }
-        };
-
-        http.send();
+        update_status_once()
+        updating_room_status()
     }
 
 

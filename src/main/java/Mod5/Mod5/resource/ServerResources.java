@@ -7,7 +7,13 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import Mod5.Mod5.Dao.UserDao;
 import Mod5.Mod5.filter.Secured;
+import Mod5.Mod5.model.RoomStatus;
+import Mod5.Mod5.model.UserRoom;
 
 @Secured
 @Path("/security")
@@ -17,29 +23,31 @@ public class ServerResources {
     @Context
     ServletContext servletContext;
 
-    @GET
-    @Path("/hello")
-    @Produces(MediaType.TEXT_HTML)
-    public String hello() {
-        System.out.println("Hello");
-        return "Hello";
-    }
 
     @GET
-    @Path("/status")
-    @Produces(MediaType.APPLICATION_JSON)
-    public boolean getStatus() {
-        System.out.println(ServerResources.beingInvaded);
-        return ServerResources.beingInvaded;
+    @Path("/profile/{username}/status")
+    @Consumes({MediaType.APPLICATION_FORM_URLENCODED, MediaType.MULTIPART_FORM_DATA})
+    public UserRoom getRoomStatus(@Context HttpServletResponse response,
+                                          @Context HttpServletRequest request,
+                                          @PathParam("username") String username) throws IOException {
+//        if (error != null) {
+//            if (error.equals("not_authorized") ||
+//                    error.equals("not_activated") ||
+//                    error.equals("reset_token_invalid")) {
+//                response.addHeader("error", error);
+//            }
+//        }
+//
+//        if (message != null) {
+//            if (message.equals("reset_success") ||
+//                    message.equals("reset_request_success") ||
+//                    message.equals("registration_success")) {
+//                response.addHeader("message", message);
+//            }
+//        }
+        System.out.println("getting rooms status");
+        return new UserRoom(UserDao.instance.getRoomsStatus(username), username);
     }
-
-    @POST
-    @Path("/update/{status}")
-    public void update(@PathParam("status") boolean status) {
-        ServerResources.beingInvaded = status;
-        System.out.println("UPDATE\nStatus: " + status + "\n" + ServerResources.beingInvaded);
-    }
-
 
     @GET
     @Path("/profile/{username}")
@@ -62,7 +70,7 @@ public class ServerResources {
 //        }
 
         ClassLoader classLoader = getClass().getClassLoader();
-        InputStream inputStream = classLoader.getResourceAsStream("../../html/Security.html");
+        InputStream inputStream = classLoader.getResourceAsStream("../../html/profile.html");
 
         System.out.println("Req received.");
 

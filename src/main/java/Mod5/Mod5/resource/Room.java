@@ -27,7 +27,7 @@ public class Room {
     @POST
     @Path("/status")
     @Consumes({MediaType.APPLICATION_FORM_URLENCODED, MediaType.MULTIPART_FORM_DATA})
-    public void savePicture(@FormDataParam("status") String status,
+    public void saveStatus(@FormDataParam("people") String status,
                             @FormDataParam("room_id") int room_id,
                             @Context HttpServletResponse servletResponse,
                             @Context HttpServletRequest servletRequest) throws IOException {
@@ -37,6 +37,22 @@ public class Room {
 //                body.getMediaType().toString().equals("image/png")) {
         System.out.println("updating status");
         UserDao.instance.updateStatus(status, room_id);
+    }
+
+    @POST
+    @Path("/temp")
+    @Consumes({MediaType.APPLICATION_FORM_URLENCODED, MediaType.MULTIPART_FORM_DATA})
+    public void saveTemp(
+                            @FormDataParam("room_id") int room_id,
+                            @FormDataParam("temp") String temp,
+                            @Context HttpServletResponse servletResponse,
+                            @Context HttpServletRequest servletRequest) throws IOException {
+
+//        if (body.getMediaType().toString().equals("image/jpeg") ||
+//                body.getMediaType().toString().equals("image/jpg") ||
+//                body.getMediaType().toString().equals("image/png")) {
+        System.out.println("updating status");
+        UserDao.instance.updateTemp(Float.parseFloat(temp),room_id);
     }
 
     @Path("/{room_id}")

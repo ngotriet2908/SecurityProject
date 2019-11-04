@@ -1,6 +1,7 @@
 package Mod5.Mod5.Dao;
 
 import Mod5.Mod5.model.Picture;
+import Mod5.Mod5.model.RoomStatus;
 import org.apache.commons.codec.binary.Hex;
 import Mod5.Mod5.model.User;
 import Mod5.Mod5.settings.DatabaseInitialiser;
@@ -217,6 +218,31 @@ public enum UserDao {
             } else {
                 return null;
             }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public List<RoomStatus>  getRoomsStatus(String username) {
+        try {
+            PreparedStatement statement;
+            String query = "SELECT room.room_id, room.people, room.temperature FROM room, room_relation " +
+                    " WHERE room.room_id = room_relation.room_id " +
+                    " AND room_relation.username = ? ";
+
+
+            statement = DatabaseInitialiser.getCon().prepareStatement(query);
+            statement.setString(1, username);
+
+            ResultSet resultSet = statement.executeQuery();
+            List<RoomStatus>  roomStatuses = new ArrayList<>();
+            // should be the first entry if exists
+            while (resultSet.next()) {
+                roomStatuses.add(new RoomStatus(resultSet.getFloat("temperature"), resultSet.getString("people"), resultSet.getInt("room_id")));
+            }
+            return roomStatuses;
         } catch (SQLException se) {
             se.printStackTrace();
         }
@@ -538,12 +564,34 @@ public enum UserDao {
     public boolean updateStatus(String status, int room_id) {
         try {
             String query = "UPDATE room " +
-                    " SET status = ? " +
+                    " SET people = ?" +
                     " WHERE room_id = ? ";
 
             PreparedStatement statementForUpdate = DatabaseInitialiser.getCon().prepareStatement(query);
 
             statementForUpdate.setString(1, status);
+            statementForUpdate.setInt(2, room_id);
+
+            int rowsAffected = statementForUpdate.executeUpdate();
+
+            return rowsAffected > 0;
+
+        } catch (SQLException se) {
+            se.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public boolean updateTemp(float temp,int room_id) {
+        try {
+            String query = "UPDATE room " +
+                    " SET temperature = ?" +
+                    " WHERE room_id = ? ";
+
+            PreparedStatement statementForUpdate = DatabaseInitialiser.getCon().prepareStatement(query);
+
+            statementForUpdate.setFloat(1, temp);
             statementForUpdate.setInt(2, room_id);
 
             int rowsAffected = statementForUpdate.executeUpdate();
@@ -598,4 +646,6 @@ public enum UserDao {
         }
         return false;
     }
+
+
 }

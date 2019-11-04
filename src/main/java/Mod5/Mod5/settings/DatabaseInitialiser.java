@@ -24,19 +24,20 @@ public class DatabaseInitialiser implements ServletContextListener {
             System.err.println("Error loading driver: " + cnfe);
         }
 
-        String host = "cristiantrusin.ddns.net";
-        String dbName = "mod5";
-        String myschema = "public";
+//        String host = "cristiantrusin.ddns.net";
+//        String dbName = "mod5";
+//        String myschema = "public";
+//        String url = "jdbc:postgresql://" + host + ":5432/" + dbName + "?currentSchema=" + myschema;
+//        String user = "pi";
+//        String password = "123000";
+
+
+        String host = "localhost";
+        String dbName = "postgres";
+        String myschema = "mod5";
         String url = "jdbc:postgresql://" + host + ":5432/" + dbName + "?currentSchema=" + myschema;
-        String user = "pi";
-        String password = "123000";
-
-
-//        String host = "farm02.ewi.utwente.nl";
-//        String dbName = "docker";
-//        String url = "jdbc:postgresql://" + host + ":7005/" + dbName;
-//        String user = "docker";
-//        String password = "1Pu7WY99OW";
+        String user = "ngocapu";
+        String password = "";
 
         try {
             con = DriverManager.getConnection(url, user, password);
