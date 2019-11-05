@@ -4,8 +4,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import Mod5.Mod5.Dao.UserDao;
-import Mod5.Mod5.mail.EmailHtmlTemplate;
-import Mod5.Mod5.mail.MailAPI;
 import Mod5.Mod5.model.AvailabilityCheck;
 import Mod5.Mod5.settings.ApplicationSettings;
 

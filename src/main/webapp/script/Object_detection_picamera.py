@@ -175,7 +175,7 @@ for frame1 in camera.capture_continuous(rawCapture, format="bgr",use_video_port=
     vis_util.visualize_boxes_and_labels_on_image_array(frame, np.squeeze(boxes), np.squeeze(classes).astype(np.int32), np.squeeze(scores), category_index, use_normalized_coordinates=True, line_thickness=8, min_score_thresh=0.40)
     cv2.putText(frame,"ROOM: {0}".format(ROOM_ID),(30,50),font,1,(255,255,0),2,cv2.LINE_AA)
     countAndSend(np.squeeze(scores), np.squeeze(classes).astype(np.int32), frame)
-    cv2.imshow('People detector', frame)
+    #cv2.imshow('People detector', frame)
     if cv2.waitKey(1) == ord('q'):
         break
     rawCapture.truncate(0)

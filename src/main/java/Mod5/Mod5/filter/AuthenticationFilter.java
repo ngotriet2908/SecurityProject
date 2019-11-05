@@ -114,7 +114,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     private void forwardUnauthorized(String error) {
         try {
             servletResponse.setStatus(401);
-            servletResponse.sendRedirect("/runner/login/?error=" + error);
+            servletResponse.sendRedirect("/rest/login/?error=" + error);
         } catch (IOException e) {
             e.printStackTrace();
         }
