@@ -32,19 +32,19 @@ public class DatabaseInitialiser implements ServletContextListener {
 //        String password = "123000";
 
 
-//        String host = "cristiantrusin.ddns.net";
-//        String dbName = "mod5";
-//        String myschema = "mod5";
-//        String url = "jdbc:postgresql://" + host + ":5432/" + dbName + "?currentSchema=" + myschema;
-//        String user = "member";
-//        String password = "1q2w3e4r5t";
-
-        String host = "localhost";
-        String dbName = "postgres";
+        String host = "cristiantrusin.ddns.net";
+        String dbName = "mod5";
         String myschema = "mod5";
         String url = "jdbc:postgresql://" + host + ":5432/" + dbName + "?currentSchema=" + myschema;
-        String user = "ngocapu";
-        String password = "";
+        String user = "member";
+        String password = "1q2w3e4r5t";
+//
+//        String host = "localhost";
+//        String dbName = "postgres";
+//        String myschema = "mod5";
+//        String url = "jdbc:postgresql://" + host + ":5432/" + dbName + "?currentSchema=" + myschema;
+//        String user = "ngocapu";
+//        String password = "";
 
 
         try {

@@ -24,23 +24,12 @@ public class User {
     private Integer totalSteps;
 
 
-    public User(String username, String password, String firstName, String lastName, String email, String phone,
-                String recoveryQuestion1, String recoveryAnswer1, String recoveryQuestion2, String recoveryAnswer2,
-                Integer isPremium, Date startDate, Date endDate, Integer totalRuns, Integer totalTime,
-                Integer totalDistance, Integer totalSteps) {
+    public User(String username, String password, String firstName, String lastName, String email) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.phone = phone;
-        this.isPremium = isPremium;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.totalRuns = totalRuns;
-        this.totalTime = totalTime;
-        this.totalDistance = totalDistance;
-        this.totalSteps = totalSteps;
     }
 
     public User(String username, String password) {
@@ -49,14 +38,6 @@ public class User {
         this.firstName = null;
         this.lastName = null;
         this.email = null;
-        this.phone = null;
-        this.isPremium = null;
-        this.startDate = null;
-        this.endDate = null;
-        this.totalRuns = null;
-        this.totalTime = null;
-        this.totalDistance = null;
-        this.totalSteps = null;
     }
 
     public User() {
@@ -65,14 +46,6 @@ public class User {
         this.firstName = null;
         this.lastName = null;
         this.email = null;
-        this.phone = null;
-        this.isPremium = null;
-        this.startDate = null;
-        this.endDate = null;
-        this.totalRuns = null;
-        this.totalTime = null;
-        this.totalDistance = null;
-        this.totalSteps = null;
     }
 
     public String getUsername() {
@@ -114,78 +87,4 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public Integer getIsPremium() {
-        return isPremium;
-    }
-
-    public void setIsPremium(Integer isPremium) {
-        this.isPremium = isPremium;
-    }
-
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
-    }
-
-    public Integer getTotalRuns() {
-        return totalRuns;
-    }
-
-    public void setTotalRuns(Integer totalRuns) {
-        this.totalRuns = totalRuns;
-    }
-
-    public Integer getTotalTime() {
-        return totalTime;
-    }
-
-    public void setTotalTime(Integer totalTime) {
-        this.totalTime = totalTime;
-    }
-
-    public Integer getTotalDistance() {
-        return totalDistance;
-    }
-
-    public void setTotalDistance(Integer totalDistance) {
-        this.totalDistance = totalDistance;
-    }
-
-    public Integer getTotalSteps() {
-        return totalSteps;
-    }
-
-    public void setTotalSteps(Integer totalSteps) {
-        this.totalSteps = totalSteps;
-    }
-
-    //    public void sortArray() {
-//        Collections.sort(runs, new Comparator<Run>() {
-//            @Override
-//            public int compare(Run o1, Run o2) {
-//                return o1.getRunId().compareTo(o2.getRunId());
-//            }
-//        });
-//        Collections.reverse(runs);
-//    }
 }
